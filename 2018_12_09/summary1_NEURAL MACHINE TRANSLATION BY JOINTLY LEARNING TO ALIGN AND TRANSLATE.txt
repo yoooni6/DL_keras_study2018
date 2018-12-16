@@ -1,0 +1,31 @@
+1. introduction
+
+_1 
+conventional phrase-based system
+
+_2
+encoder–decoders
+
+_3
+A potential issue with this encoder–decoder approach is that a neural network needs to be able to
+compress all the necessary information of a source sentence into a fixed-length vector
+모든 필수 정보를 정해진 길이의 벡터에 담는 건 어렵다.
+긴 문장들에서는 어떡하는가? 훈련 말뭉치보다 길면?
+이걸 input 문장 길이를 늘리도록 만들어왔었다.
+
+_4
+Each time the proposed model generates a word in a translation, it
+(soft-)searches for a set of positions in a source sentence where the most relevant information is
+concentrated.
+가장 중요한 정보가 집중되어 있는 문장 내 위치들을 찾는다.
+source의 context vectors, target의 이전 단어들을 고려
+
+p2_1
+it encodes the input sentence into a sequence of vectors and chooses a subset of these vectors adaptively
+while decoding the translation.
+
+p2_2
+On the task of English-to-French translation
+
+2. BACKGROUND: NEURAL MACHINE TRANSLATION
+
