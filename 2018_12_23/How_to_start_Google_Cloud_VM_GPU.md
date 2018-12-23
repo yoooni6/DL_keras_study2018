@@ -16,7 +16,60 @@
 * GPU 할당량 신청하기
 * GPU가 포함된 VM 생성하기
 * SSH 접속 후 GPU Driver(CUDA, cuDNN) 설치하기
+
+      # CUDA Toolkit 9.0 설치
+      curl -O http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+      sudo dpkg -i ./cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+      sudo apt-get update
+      sudo apt-get install cuda-9-0 -y
+      
+      nvidia-smi  # 설치 확인
+
+      # Nvidia Developer Program에 회원가입 후 cuDNN 다운로드 사이트에서 tensorflow에서 지원하는 버전 중 CUDA와 호환되는 파일 Runtime 버전과 Developer 버전 모두 Download(이후 SSH 창에서 업로드)
+
+      sudo dpkg -i libcudnn7*
+      echo 'export CUDA_HOME=/usr/local/cuda' >> ~/.bashrc
+      echo 'export PATH=$PATH:$CUDA_HOME/bin' >> ~/.bashrc
+      echo 'export LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+      source ~/.bashrc
+
 * (Optional) docker-ce, nvidia-docker2 설치하기
+    
+      # Docker 설치하기
+      #/bin/bash
+      # install packages to allow apt to use a repository over HTTPS:
+      sudo apt-get -y install \
+      apt-transport-https ca-certificates curl software-properties-common
+      # add Docker’s official GPG key:
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      # set up the Docker stable repository.
+      sudo add-apt-repository \
+         "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+         $(lsb_release -cs) \
+         stable"
+      # update the apt package index:
+      sudo apt-get -y update
+      # finally, install docker
+      sudo apt-get -y install docker-ce
+
+      # nvidia-docker2 설치하기
+      curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+      curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu16.04/amd64/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+      sudo apt-get -qq update
+      sudo apt-get install -y nvidia-docker2
+      sudo pkill -SIGHUP dockerd
+
+      # Tensorflow 가 포함된 Dockerfile 만들고 실행하기
+      cat << EOF > Dockerfile.tensorflow_gpu_jupyter
+      FROM tensorflow/tensorflow:latest-gpu
+      RUN apt-get update && apt-get install -y python-opencv python-skimage git
+      RUN pip install requests ipywidgets seaborn
+      RUN jupyter nbextension enable --py widgetsnbextension
+      CMD ["/run_jupyter.sh", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password='sha1:a6179df3a1ce:383a2f049eb0fdf432e439b3c7170e21a3e07312'"]
+      EOF
+
+      sudo docker build -t tensorflow_gpu_jupyter -f Dockerfile.tensorflow_gpu_jupyter .
+      sudo nvidia-docker run -dit --restart unless-stopped -p 8888:8888 tensorflow_gpu_jupyter
 * 방화벽 오픈하기
 * VM Restart
 
