@@ -19,3 +19,10 @@ __Deep Learning 탐구생활(From 2018)__
 * ### 2018.12.09. AM 10:00 ~ PM 01:00 - 첫번째 모임
 * ### 2018.12.13. PM 06:00 ~ PM 09:00 - 두번째 모임
 * ### 2018.12.16. AM 10:00 ~ PM 12:30 - 세번째 모임
+* ### 2018.12.23. AM 10:00 ~ PM 13:30 - 네번째 모임
+
+<br/>
+
+> ## __참고사항__
+
+[구글 클라우드에 GPU 포함된 VM 생성하기](https://github.com/yoooni6/DL_keras_study2018/blob/master/2018_12_23/How_to_start_Google_Cloud_VM_GPU.md)
