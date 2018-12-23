@@ -25,5 +25,5 @@ __Deep Learning 탐구생활(From 2018)__
 
 > ## __참고사항__
 
-[구글 클라우드에 GPU 포함된 VM 생성하기](https://github.com/yoooni6/DL_keras_study2018/blob/master/2018_12_23/How_to_start_Google_Cloud_VM_GPU.md)
-[Git 주요 명령어](https://github.com/yoooni6/DL_keras_study2018/blob/master/2018_12_23/Git_%EC%A3%BC%EC%9A%94%EB%AA%85%EB%A0%B9%EC%96%B4.md)
+* [구글 클라우드에 GPU 포함된 VM 생성하기](https://github.com/yoooni6/DL_keras_study2018/blob/master/2018_12_23/How_to_start_Google_Cloud_VM_GPU.md)
+* [Git 주요 명령어](https://github.com/yoooni6/DL_keras_study2018/blob/master/2018_12_23/Git_%EC%A3%BC%EC%9A%94%EB%AA%85%EB%A0%B9%EC%96%B4.md)
