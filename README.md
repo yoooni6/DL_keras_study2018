@@ -23,4 +23,5 @@ __Deep Learning 탐구생활(From 2018)__
 
 <br/>
 > ## __참고사항__
+
 [구글 클라우드에 GPU 포함된 VM 생성하기](https://github.com/yoooni6/DL_keras_study2018/blob/master/2018_12_23/How_to_start_Google_Cloud_VM_GPU.md)
