@@ -25,8 +25,8 @@
         $ .jupyter/jupyter_notebook_config.py
 
 
-        c.NotebookApp.notebook_dir = '/home/kysmy33/'
-        c.NotebookApp.password = 'sha1:4ceaa0c8cd84:098fae168aa0bc17d3e9eb900990c1540dd524da'
+        c.NotebookApp.notebook_dir = '[directory]'
+        c.NotebookApp.password = '[password]'
         c.NotebookApp.ip = '0.0.0.0'
         c.NotebookApp.port = 8888
         c.NotebookApp.open_browser = False
