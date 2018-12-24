@@ -28,12 +28,20 @@
   - bash [download된 archive] 명령어로 설치
   - source .bashrc (PATH 변경 반영) 
   - 기존에 있던 python 2.7과 3.5와의 충돌이 생길지도 모르겠지만 알아서 해결하기로 함
+  - jupyter notebook과 lab에 python2.7 커널 추가하기
+        
+        jupyter kernelspec list
+        conda update conda
+        conda create -n py27 python=2.7 anaconda
+
+        source activate py27
+        ipython kernelspec install-self --user
+        source deactivate
 
   - jupyter notebook과 lab 설정 파일 변경
         
         $ jupyter notebook --generate-config
         $ vim .jupyter/jupyter_notebook_config.py
-
 
         c.NotebookApp.notebook_dir = '[directory]'
         c.NotebookApp.password = '[password]'
