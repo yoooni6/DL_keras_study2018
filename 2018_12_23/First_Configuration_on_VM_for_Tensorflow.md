@@ -3,9 +3,9 @@
 * ### Google Cloud VM에 필요한 패키지 설치하기
   - python2와 3이 미리 설치되어있기 때문에 사용하면서 하나씩 필요한 것들을 그때 그때 설치함
 
-        $ sudo apt-get python2-pip
+        $ sudo apt-get install python-pip
         $ pip2 install --upgrade pip
-        $ sudo apt-get python3-pip
+        $ sudo apt-get install python3-pip
         $ pip3 install --upgrade pip
         
         * 혹시 문제 생기면 
