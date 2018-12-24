@@ -17,6 +17,7 @@
         $ pip install --user pandas
         $ pip install --user jupyterlab
         $ pip install --user jupyter
+        $ pip install opencv-contrib-python
 
   - jupyter notebook과 lab 설정 파일 변경
         
