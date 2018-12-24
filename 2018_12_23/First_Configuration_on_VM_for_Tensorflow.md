@@ -26,7 +26,8 @@
 * ### 위 내용처럼 하다가 그냥 Anaconda3를 설치해서 사용하기로 마음을 바꿨음
   - https://repo.continuum.io/archive/ 에서 archive 선택하여 wget
   - bash [download된 archive] 명령어로 설치
-  - 아마도 기존에 있던 python 2.7과 3.5와의 충돌이 생기겠지만 알아서 해결하기로 함
+  - source .bashrc (PATH 변경 반영) 
+  - 기존에 있던 python 2.7과 3.5와의 충돌이 생길지도 모르겠지만 알아서 해결하기로 함
 
   - jupyter notebook과 lab 설정 파일 변경
         
