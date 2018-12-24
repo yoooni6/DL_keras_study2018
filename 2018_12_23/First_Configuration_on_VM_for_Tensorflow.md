@@ -21,8 +21,7 @@
   - jupyter notebook과 lab 설정 파일 변경
         
         $ jupyter notebook --generate-config
-        vim 
-        $ .jupyter/jupyter_notebook_config.py
+        $ vim .jupyter/jupyter_notebook_config.py
 
 
         c.NotebookApp.notebook_dir = '[directory]'
