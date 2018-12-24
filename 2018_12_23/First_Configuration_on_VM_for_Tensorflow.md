@@ -51,3 +51,7 @@
 
 * ### 참조
    http://goodtogreate.tistory.com/entry/IPython-Notebook-%EC%84%A4%EC%B9%98%EB%B0%A9%EB%B2%95
+   
+   
+* ### kaggle Data 다운받기 참조
+   https://github.com/Kaggle/kaggle-api
