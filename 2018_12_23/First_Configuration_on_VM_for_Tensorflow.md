@@ -19,6 +19,15 @@
         $ pip install --user jupyter
         $ pip install opencv-contrib-python
 
+  - python2 커널을 jupyter notebook 및 lab에 추가하기 
+
+        $ python2 -m pip install --user ipykernel
+        
+* ### 위 내용처럼 하다가 그냥 Anaconda3를 설치해서 사용하기로 마음을 바꿨음
+  - https://repo.continuum.io/archive/ 에서 archive 선택하여 wget
+  - bash [download된 archive] 명령어로 설치
+  - 아마도 기존에 있던 python 2.7과 3.5와의 충돌이 생기겠지만 알아서 해결하기로 함
+
   - jupyter notebook과 lab 설정 파일 변경
         
         $ jupyter notebook --generate-config
@@ -30,10 +39,6 @@
         c.NotebookApp.ip = '0.0.0.0'
         c.NotebookApp.port = 8888
         c.NotebookApp.open_browser = False
-
-  - python2 커널을 jupyter notebook 및 lab에 추가하기 
-
-        $ python2 -m pip install --user ipykernel
 
 * ### 참조
    http://goodtogreate.tistory.com/entry/IPython-Notebook-%EC%84%A4%EC%B9%98%EB%B0%A9%EB%B2%95
