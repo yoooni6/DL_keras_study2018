@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+'''
 !wget http://www.cis.fordham.edu/wisdm/includes/datasets/latest/WISDM_ar_latest.tar.gz
 !tar -xvzf WISDM_ar_latest.tar.gz
 !rm -rf WISDM_ar_latest.tar.gz
+'''
 
 import pandas as pd
 import numpy as np
@@ -22,6 +24,7 @@ import re
 
 rcParams['figure.figsize'] = 14, 8
 
+# 데이터 불러와서 원하는 모양의 데이터 프레임으로 만들기
 RANDOM_SEED = 42
 columns = ['user','activity','timestamp', 'x-axis', 'y-axis', 'z-axis']
 df = pd.read_csv('WISDM_ar_v1.1/WISDM_ar_v1.1_raw.txt', header = None, names = columns)
@@ -30,41 +33,30 @@ if re.search(';', df.iloc[0, 5]) != None :
 df = df.dropna()
 df.head()
 
+"""## 0. LSTM Timeseries 전처리"""
+
+# labels 만들기
 N_TIME_STEPS = 200
 N_FEATURES = 3
 step = 20
 labels = []
+
 for i in range(0, len(df) - N_TIME_STEPS, step):
     label = stats.mode(df['activity'][i: i + N_TIME_STEPS])[0][0]
     labels.append(label)
 
-"""## LSTM Timeseries 전처리"""
-
+# X, Y 만들기
 data_gen = TimeseriesGenerator(np.array(df[['x-axis', 'y-axis', 'z-axis']]), np.repeat(0, len(df)),
                                length=200, sampling_rate=1, 
                                stride = 20, batch_size = len(labels))
-
 x_all = data_gen[0][0]
-
-x_all[0].shape
-
 y_all = np.asarray(pd.get_dummies(labels), dtype = np.float32)
-
-pd.DataFrame(labels).groupby(0).size()
-
-temp_idx = 5000
-print(labels[temp_idx])
-y_all[temp_idx]
 
 # train, test 로 데이터 나누기
 X_train, X_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.3, random_state=42)
-
 assert X_train.shape[0] == len(y_train)
 
-
-
-y_train[0]
-
+# 일부 데이터 시각화해보기
 idx = 0
 
 plt.figure(1)
@@ -84,7 +76,6 @@ plt.legend('z', loc = 'upper right')
 plt.show()
 
 """### 1. LSTM만으로 예측"""
-
 hidden_size = 50
 output_dim = len(np.unique(labels))
 
@@ -102,12 +93,8 @@ hist = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs = 10
 
 hist.history.keys()
 
-# 5. 모델 학습 과정 표시하기
-# %matplotlib inline
-import matplotlib.pyplot as plt
-
+# 모델 학습 과정 시각화하기
 fig, loss_ax = plt.subplots()
-
 acc_ax = loss_ax.twinx()
 
 loss_ax.plot(hist.history['loss'], 'y', label='train loss')
@@ -125,9 +112,8 @@ acc_ax.legend(loc='lower left')
 
 plt.show()
 
-"""### 2. DNN"""
-
-# train, test 로 데이터 나누기
+"""### 2. DNN으로 예측"""
+# 데이터 전처리 다시하기 - train, test 로 데이터 나누기
 y_DNNall = np.asarray(pd.get_dummies(df['activity']), dtype = np.float32)
 X_DNNtrain, X_DNNtest, y_DNNtrain, y_DNNtest = train_test_split(df[['x-axis', 'y-axis', 'z-axis']], y_DNNall, test_size=0.3, random_state=42)
 
@@ -148,12 +134,10 @@ hist = model.fit(X_DNNtrain, y_DNNtrain, validation_data=(X_DNNtest, y_DNNtest),
 from IPython.display import SVG
 from keras.utils.vis_utils import model_to_dot
 
-# %matplotlib inline
-
 SVG(model_to_dot(model, show_shapes=True).create(prog='dot', format='svg'))
 
-"""### 3. stacked LSTM"""
 
+"""### 3-1. stacked LSTM(2개) 으로 예측하기"""
 hidden_size = 50
 output_dim = len(np.unique(labels))
 
@@ -170,7 +154,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 hist = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs = 10, batch_size = 1024)
 
 
-
+"""### 3-2. stacked LSTM(3개) 으로 예측하기"""
 model = Sequential()
 model.add(LSTM(hidden_size, return_sequences=True, input_shape = (N_TIME_STEPS, N_FEATURES)))
 model.add(LSTM(hidden_size, return_sequences=True))
@@ -182,21 +166,13 @@ model.add(Activation('softmax'))
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-hist = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs = 10, batch_size = 1024)
-
-
 
 """### 4. stacked LSTM + Autoencoder"""
-
 new_df = df[np.isin(df['activity'], ['Walking', 'Sitting'])].reset_index(drop=True)
-
 df_walking = df[df['activity'] == 'Walking'].reset_index(drop=True)
-
 df_sitting = df[df['activity'] == 'Sitting'].reset_index(drop=True)
 
-print(df_walking.shape)
-df_sitting.shape
-
+# 데이터 전처리 다시하기
 N_TIME_STEPS = 200
 N_FEATURES = 3
 step = 20
@@ -207,6 +183,7 @@ for i in range(0, len(df_walking) - N_TIME_STEPS, step):
 
 df_sitting.head()
 
+# 데이터 시각화 - walking
 idx = 0
 
 plt.figure(1)
@@ -224,9 +201,9 @@ plt.subplot(313)
 plt.plot(df_walking[df_walking['user'] == 33].iloc[:, 5], 'o-')
 plt.legend('z', loc = 'upper right')
 
-
 plt.show()
 
+# 데이터 시각화 - sitting
 plt.figure(1)
 plt.subplot(311)
 plt.plot(df_sitting[df_sitting['user'] == 33].iloc[:, 3], 'o-')
@@ -242,22 +219,20 @@ plt.subplot(313)
 plt.plot(df_sitting[df_sitting['user'] == 33].iloc[:, 5], 'o-')
 plt.legend('z', loc = 'upper right')
 
-
 plt.show()
 
-
-
+# X, Y 생성하기
 data_gen = TimeseriesGenerator(np.array(df_walking[['x-axis', 'y-axis', 'z-axis']]), np.repeat(0, len(df_walking)),
                                length=200, sampling_rate=1, 
                                stride = 20, batch_size = len(labels2))
 
 x_all = data_gen[0][0]
-
 y_all = np.asarray(pd.get_dummies(labels2), dtype = np.float32)
 
 # train, test 로 데이터 나누기
 X_train, X_test = train_test_split(x_all, test_size=0.3, random_state=42)
 
+# 시각화해보기
 idx = 0
 
 plt.figure(1)
@@ -276,32 +251,7 @@ plt.legend('z', loc = 'upper right')
 
 plt.show()
 
-
-
-
-
-# define model
-model = Sequential()
-model.add(LSTM(50, activation='tanh', input_shape=(N_TIME_STEPS,N_FEATURES)))
-model.add(RepeatVector(N_TIME_STEPS))
-model.add(LSTM(50, activation='tanh', return_sequences=True))
-model.add(TimeDistributed(Dense(3)))
-model.compile(optimizer='adam', loss='mse')
-
-# fit model
-model.fit(X_train, X_train, validation_data=(X_test, X_test), epochs=10, batch_size= 256)
-
-model.layers[0].output
-
-yhat.shape
-
-from IPython.display import SVG
-from keras.utils.vis_utils import model_to_dot
-
-# %matplotlib inline
-
-SVG(model_to_dot(model, show_shapes=True).create(prog='dot', format='svg'))
-
+# functional 로 모델 생성 - 진행 중 마지막 결론을 어떻게 낼지 몰라서 중단함
 from numpy import array
 from keras.models import Model
 from keras.layers import Input
@@ -336,23 +286,11 @@ data_gen = TimeseriesGenerator(np.array(df_sitting[['x-axis', 'y-axis', 'z-axis'
                                stride = 20, batch_size = len(labels2))
 
 x_all = data_gen[0][0]
-
 X_sitting_hat = encoder.predict(x_all)
-
 X_train_hat = encoder.predict(X_train)
 
-X_test_hat.shape
-
-X_sitting_hat.shape
-
 X_all = np.concatenate([X_train_hat, X_test_hat, X_sitting_hat], axis = 0)
-
-X_all.shape
-
 y_all = np.concatenate([np.repeat(0, X_all.shape[0]-X_sitting_hat.shape[0]), np.repeat(1, X_sitting_hat.shape[0])], axis = 0)
-
-y_all.shape
-
 y_all = np.reshape(y_all, (24197, 1, 1))
 
 X_train, X_test, y_train, y_test = train_test_split(X_all, y_all, test_size=0.3, random_state=42)
@@ -364,7 +302,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 from IPython.display import SVG
 from keras.utils.vis_utils import model_to_dot
-
-# %matplotlib inline
 
 SVG(model_to_dot(model, show_shapes=True).create(prog='dot', format='svg'))
