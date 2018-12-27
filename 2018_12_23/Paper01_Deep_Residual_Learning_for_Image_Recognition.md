@@ -65,13 +65,12 @@
   - do not use dropout
 ### 4. Experiments
 * ImageNet Classification <br/>
-<img src = 'images/paper01_image4.PNG' alt = 'paper01_image4' width = '500' height = '250' />
+<img src = 'images/paper01_image4.PNG' alt = 'paper01_image4' width = '500' height = '250' /><br/>
   - Plain Networks - degradation problem 존재
   - Residual Networks - 빠르고 정확도 높은, 깊이가 깊어질 수록 error가 감소하는 모델
   - Identity vs. Projection Shortcuts - Projection이 소폭 정확도가 개선되긴 하지만 크지 않아서 그냥 zero-padding 써도 됨
   - Deeper Bottleneck Architectures - training 시간을 걱정해서 만든 디자인, 1X1 layer로 차원 감소<br/>  
-    <img src = 'images/paper01_image5.PNG' alt = 'paper01_image5' width = '300' height = '150' />
-  
+    <img src = 'images/paper01_image5.PNG' alt = 'paper01_image5' width = '300' height = '150' /><br/>
     + 50-layer ResNet
     + 101-layer and 152-layer ResNets
   - Comparisons with State-of-the-art Methods
