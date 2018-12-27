@@ -1,4 +1,4 @@
-# [Paper01] Deep Residual Learning for Image Recognition
+# [Paper01] Deep Residual Learning for Image Recognition(2015)
 
 ## 내맘대로 키워드
     ResNet-18, 34, 50, 101, 152
