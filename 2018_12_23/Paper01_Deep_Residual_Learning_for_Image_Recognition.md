@@ -15,7 +15,7 @@
     > VGGNet 보다 8배 깊으면서도 덜 복잡하며 ImageNet test set 기준 3.57% error로 매우 줄였다.
 ### 1. Introduction
 * Problem of vanishing/exploding gradients : normalized initialization, intermediate normalization layers로 해결할 수 있다.
-* Degradation problem : 
+* Degradation problem  
   - 층이 쌓일수록 training error가 감소하다가 일정 숫자 이상부터 증가하는 현상
   - 단순 identity mapping을 의도한 layer(비선형)를 추가했을 때 의도한 해답을 찾을 수 없었음<br/>
   <img src = 'images/paper01_image1.PNG' alt = 'paper01_image1' width = '400' height = '200' />
